@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Move On</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 30px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  color: #333;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  font-size: 13px;
+  text-align: left;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #6a11cb;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #2575fc;
+}
+
+#hasil, #analisis, #status {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+#status {
+  font-weight: bold;
+  color: #6a11cb;
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kapan Lu Bisa Move On?</h1>
+    <label>Masukkan tanggal putus:</label>
+    <input type="date" id="tanggalPutus"><label>Lama hubungan (bulan):</label>
+<input type="number" id="lamaHubungan" min="1">
+
+<label>Skala perasaan (1-10):</label>
+<input type="number" id="skalaPerasaan" min="1" max="10">
+
+<label>Seberapa sering masih kontak setelah putus:</label>
+<select id="kontak">
+  <option value="1">Masih sering</option>
+  <option value="0.5">Kadang-kadang</option>
+  <option value="0.2">Udah nggak kontak sama sekali</option>
+</select>
+
+<label>Zodiak lu:</label>
+<select id="zodiak">
+  <option value="Cancer|1.2">Cancer</option>
+  <option value="Pisces|1.1">Pisces</option>
+  <option value="Scorpio|1.1">Scorpio</option>
+  <option value="Virgo|1.0">Virgo</option>
+  <option value="Taurus|1.0">Taurus</option>
+  <option value="Capricorn|1.0">Capricorn</option>
+  <option value="Leo|0.9">Leo</option>
+  <option value="Libra|0.9">Libra</option>
+  <option value="Aquarius|0.8">Aquarius</option>
+  <option value="Gemini|0.8">Gemini</option>
+  <option value="Sagitarius|0.8">Sagitarius</option>
+  <option value="Aries|0.8">Aries</option>
+</select>
+
+<label>Love language lu:</label>
+<select id="loveLanguage">
+  <option value="Physical Touch|1.2">Physical Touch</option>
+  <option value="Quality Time|1.1">Quality Time</option>
+  <option value="Words of Affirmation|1.0">Words of Affirmation</option>
+  <option value="Acts of Service|0.9">Acts of Service</option>
+  <option value="Receiving Gifts|0.8">Receiving Gifts</option>
+</select>
+
+<button onclick="hitung()">Hitung Prediksi</button>
+
+<div id="hasil"></div>
+<div id="analisis"></div>
+<div id="status"></div>
+
+  </div>  <script>
+    function hitung() {
+      const tanggalPutusInput = document.getElementById('tanggalPutus').value;
+      if (!tanggalPutusInput) {
+        alert("Isi tanggal putus dulu, ya!");
+        return;
+      }
+
+      const tanggalPutus = new Date(tanggalPutusInput);
+      const hariIni = new Date();
+      const bedaHari = Math.floor((hariIni - tanggalPutus) / (1000 * 60 * 60 * 24));
+
+      const bulan = parseFloat(document.getElementById('lamaHubungan').value);
+      const perasaan = parseFloat(document.getElementById('skalaPerasaan').value);
+      const kontak = parseFloat(document.getElementById('kontak').value);
+      const [zodiakName, zodiak] = document.getElementById('zodiak').value.split("|");
+      const [loveName, love] = document.getElementById('loveLanguage').value.split("|");
+
+      if (isNaN(bulan) || isNaN(perasaan)) {
+        alert("Isi semua datanya dulu ya!");
+        return;
+      }
+
+      const skor = bulan * perasaan * kontak * parseFloat(zodiak) * parseFloat(love);
+      const hariMoveOn = Math.ceil(skor * 4);
+      const sisaHari = hariMoveOn - bedaHari;
+
+      document.getElementById('hasil').innerText =
+        `Lu udah putus selama ${bedaHari} hari. Prediksi lu bisa move on sekitar ${hariMoveOn} hari (${Math.round(hariMoveOn/30)} bulan).`;
+
+      let analisis = `Sebagai ${zodiakName} yang `;
+      if (zodiak >= 1.1) {
+        analisis += `emosional dan sensitif, `;
+      } else if (zodiak >= 1.0) {
+        analisis += `rasional tapi setia, `;
+      } else {
+        analisis += `lebih mudah melepas dan adaptif, `;
+      }
+
+      analisis += `dan love language lu adalah "${loveName}", `;
+      if (love >= 1.2) {
+        analisis += `yang bikin lu gampang kangen secara fisik. `;
+      } else if (love >= 1.1) {
+        analisis += `yang bikin momen bareng susah dilupain. `;
+      } else {
+        analisis += `jadi peluang move on lu lebih cepat asal nggak dikontak lagi.`;
+      }
+
+      document.getElementById('analisis').innerText = analisis;
+
+      let status = "";
+      if (sisaHari <= 0) {
+        status = "Harusnya lu udah bisa move on. Kalau masih keinget, itu cuma bayangan masa lalu aja.";
+      } else if (sisaHari <= 14) {
+        status = `Dikit lagi… cuma sekitar ${sisaHari} hari lagi buat lepas total.`;
+      } else {
+        status = `Masih butuh sekitar ${sisaHari} hari lagi. Tapi lu udah di jalur yang bener, slow but sure.`;
+      }
+
+      document.getElementById('status').innerText = status;
+    }
+  </script></body>
+</html>
